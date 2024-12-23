@@ -2,5 +2,9 @@
 import type { RefAttributes } from "react";
 
 export const MemeCanvas = (props: RefAttributes<HTMLCanvasElement>) => {
-  return <canvas {...props} />;
+  return (
+    <div className="flex justify-center">
+      <canvas {...props} />
+    </div>
+  );
 };

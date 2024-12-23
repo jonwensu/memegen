@@ -3,8 +3,9 @@ import { Canvas as FabricCanvas, Textbox as FabricTextbox } from "fabric";
 import type { RefObject } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CANVAS_MIN_HEIGHT, CANVAS_MIN_WIDTH } from "../constants";
-import type { FabricHandler, MemeTemplate } from "../types";
+import type { FabricHandler } from "../types";
 import { loadBackgroundImage, loadTextboxes } from "../utils";
+import type { MemeTemplate } from "@/types";
 
 function useFabric(canvasRef: RefObject<HTMLCanvasElement | null>) {
   const fabricRef = useRef<FabricCanvas | null>(null);
@@ -14,7 +15,6 @@ function useFabric(canvasRef: RefObject<HTMLCanvasElement | null>) {
     fabricRef.current = new FabricCanvas(canvasRef.current, {
       width: CANVAS_MIN_WIDTH,
       height: CANVAS_MIN_HEIGHT,
-      backgroundColor: "white",
     });
     fabricRef.current.renderAll();
     return () => {
@@ -28,7 +28,7 @@ function useFabric(canvasRef: RefObject<HTMLCanvasElement | null>) {
 export function useMemeCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const fabricCanvas = useFabric(canvasRef);
-  const [memeTemplate, setMemeTemplate] = useState<MemeTemplate | null>(null);
+  const [memeTemplate, setMemeTemplate] = useState<MemeTemplate>();
 
   const bootstrap = useCallback(async () => {
     if (!fabricCanvas) return;
@@ -67,5 +67,5 @@ export function useMemeCanvas() {
     canvas.renderAll();
   });
 
-  return { canvasRef, addText, setMemeTemplate };
+  return { canvasRef, addText, memeTemplate, setMemeTemplate };
 }

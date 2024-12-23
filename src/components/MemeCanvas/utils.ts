@@ -1,7 +1,7 @@
 import type { Canvas as FabricCanvas } from "fabric";
 import { FabricImage, Textbox as FabricTextbox, Shadow } from "fabric";
 import { CANVAS_MIN_HEIGHT, CANVAS_MIN_WIDTH } from "./constants";
-import type { TextboxConfig } from "./types";
+import type { TextboxConfig } from "@/types";
 
 export async function loadImage(url: string) {
   const image = await FabricImage.fromURL(url);
@@ -21,17 +21,22 @@ export async function loadBackgroundImage(url: string, canvas: FabricCanvas) {
   const image = await loadImage(url);
 
   canvas.backgroundImage = image;
-  canvas.set("width", image.getScaledWidth());
-  canvas.set("height", image.getScaledHeight());
+  canvas.setDimensions({
+    width: image.getScaledWidth(),
+    height: image.getScaledHeight(),
+  });
   canvas.renderAll();
 }
 
-function createTextbox({ content, x, y, allCaps, ...rest }: TextboxConfig) {
+function createTextbox(
+  canvas: FabricCanvas,
+  { content, x = 0, y = 0, allCaps, ...rest }: TextboxConfig,
+) {
   return new FabricTextbox(allCaps ? content.toUpperCase() : content, {
     originX: "center",
     originY: "center",
-    left: x,
-    top: y,
+    left: x * canvas.width,
+    top: y * canvas.height,
     ...rest,
   });
 }
@@ -50,7 +55,8 @@ export function loadTextboxes(canvas: FabricCanvas, texts: TextboxConfig[]) {
     fontWeight: "bold",
     stroke: "black",
     strokeWidth: 1,
-    charSpacing: -35,
+    charSpacing: -50,
+    textAlign: "center",
     shadow: new Shadow({
       color: "black",
       blur: 4,
@@ -60,7 +66,7 @@ export function loadTextboxes(canvas: FabricCanvas, texts: TextboxConfig[]) {
   };
   canvas.add(
     ...texts.map((config) =>
-      createTextbox({ ...defaultTextConfig, ...config }),
+      createTextbox(canvas, { ...defaultTextConfig, ...config }),
     ),
   );
 
