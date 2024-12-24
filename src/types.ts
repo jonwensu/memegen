@@ -23,6 +23,7 @@ export type TextboxConfig = Partial<
 
 export type MemeTemplate = {
   id: string;
+  description: string;
   url: string;
   texts?: TextboxConfig[];
 };

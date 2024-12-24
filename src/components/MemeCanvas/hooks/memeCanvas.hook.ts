@@ -17,6 +17,10 @@ function useFabric(canvasRef: RefObject<HTMLCanvasElement | null>) {
       height: CANVAS_MIN_HEIGHT,
     });
     fabricRef.current.renderAll();
+    fabricRef.current.on("text:changed", (options) => {
+      console.log(options);
+    });
+
     return () => {
       fabricRef.current?.dispose();
     };

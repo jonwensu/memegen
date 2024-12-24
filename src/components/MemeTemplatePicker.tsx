@@ -15,7 +15,7 @@ export const MemeTemplatePicker = ({
 }: MemeTemplatePickerProps) => {
   return (
     <div>
-      <div className="p-6">
+      <div className="p-2">
         <div className="space-y-3">
           <h1 className="text-2xl text-white">Pick a meme template</h1>
           <div className="flex gap-3">
