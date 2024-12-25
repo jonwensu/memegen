@@ -1,9 +1,14 @@
 "use client";
 import { MemeCanvas, useMemeCanvas } from "@/components/MemeCanvas";
-import { MemeTemplatePicker } from "@/components/MemeTemplatePicker";
+import { MemeTemplatePicker } from "@/components/MemeCanvas/MemeTemplatePicker";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import type { MemeTemplate } from "@/types";
+import { Copy } from "lucide-react";
+
 const MEME_URL = "https://i.imgur.com/tDspe1M.jpeg";
 const OLD_MAN = "https://i.imgur.com/UukQHgi.jpeg";
 
@@ -50,26 +55,80 @@ const templates: MemeTemplate[] = [
 ];
 
 const Home = () => {
-  const { canvasRef, memeTemplate, setMemeTemplate } = useMemeCanvas();
+  const {
+    canvasRef,
+    memeTemplate,
+    setMemeTemplate,
+    textboxes,
+    removeObject,
+    addText,
+    updateTextbox,
+  } = useMemeCanvas();
   return (
-    <main className="container mx-auto min-h-screen max-w-screen-lg space-y-4 bg-gray-900 px-4 py-8 text-gray-100">
+    <main className="container mx-auto min-h-screen max-w-screen-lg space-y-4 bg-gray-900 py-8 text-gray-100">
       <h1 className="py-2 text-center text-4xl">Meme Generator</h1>
       <Card className="col-span-2">
-        <CardContent className="grid grid-cols-2 gap-3 divide-x divide-gray-800 py-4">
+        <CardContent className="grid grid-cols-1 gap-3 divide-y divide-gray-800 p-0 py-4 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
           <div
-            className={cn("col-span-1 flex items-center justify-center", {
+            className={cn("flex items-center justify-center", {
               "bg-gray-300/30": !memeTemplate,
             })}
           >
             <h1 className="absolute text-xl">Select a template</h1>
             <MemeCanvas ref={canvasRef} />
           </div>
-          <div className="px-5">
-            <MemeTemplatePicker
-              activeTemplate={memeTemplate}
-              templates={templates}
-              onSelect={setMemeTemplate}
-            />
+          <div className="flex flex-col justify-between px-4">
+            <div className="my-5 flex flex-col gap-3">
+              <MemeTemplatePicker
+                activeTemplate={memeTemplate}
+                templates={templates}
+                onSelect={setMemeTemplate}
+              />
+              <div className="flex max-h-80 flex-col gap-2 overflow-y-auto py-2">
+                {textboxes.map((textbox, index) => (
+                  <div key={index}>
+                    <Label>Textbox #{index + 1}</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        className="bg-white text-black"
+                        value={textbox.text}
+                        onChange={(event) => {
+                          updateTextbox(index, event.target.value);
+                        }}
+                      />
+                      <Button
+                        variant="destructive"
+                        onClick={() => removeObject(textbox)}
+                      >
+                        X
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {memeTemplate && (
+                <Button
+                  className="self-end"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => addText("Sample")}
+                >
+                  Add Text
+                </Button>
+              )}
+            </div>
+
+            <div className="mb-5 mt-10 flex justify-between">
+              <div className="flex items-center divide-x divide-green-400">
+                <Button className="rounded-none rounded-l-md bg-green-500 text-white hover:bg-green-700">
+                  Download
+                </Button>
+                <Button className="rounded-none rounded-r-md bg-green-500 text-white hover:bg-green-700">
+                  <Copy />
+                </Button>
+              </div>
+              <Button variant="outline">Reset</Button>
+            </div>
           </div>
         </CardContent>
       </Card>

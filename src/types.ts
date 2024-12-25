@@ -1,4 +1,6 @@
-import type { TextboxProps, TOptions } from "fabric";
+import { type TextboxProps, type TOptions } from "fabric";
+
+export type WithId<T> = T & { id: string };
 
 export type TextboxConfig = Partial<
   Pick<
@@ -13,17 +15,21 @@ export type TextboxConfig = Partial<
     | "charSpacing"
     | "shadow"
     | "textAlign"
+    | "originX"
+    | "originY"
+    | "left"
+    | "top"
   >
-> & {
-  content: string;
-  x?: number;
-  y?: number;
-  allCaps?: boolean;
-};
+> &
+  WithId<{
+    content: string;
+    x?: number;
+    y?: number;
+    allCaps?: boolean;
+  }>;
 
-export type MemeTemplate = {
-  id: string;
+export type MemeTemplate = WithId<{
   description: string;
   url: string;
-  texts?: TextboxConfig[];
-};
+  texts?: Omit<TextboxConfig, "id">[];
+}>;

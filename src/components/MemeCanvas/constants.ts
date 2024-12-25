@@ -1,2 +1,2 @@
-export const CANVAS_MIN_WIDTH = 480;
-export const CANVAS_MIN_HEIGHT = 500;
+export const CANVAS_MIN_WIDTH = 450;
+export const CANVAS_MIN_HEIGHT = 450;

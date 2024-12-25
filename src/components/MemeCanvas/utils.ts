@@ -1,7 +1,8 @@
 import type { Canvas as FabricCanvas } from "fabric";
 import { FabricImage, Textbox as FabricTextbox, Shadow } from "fabric";
 import { CANVAS_MIN_HEIGHT, CANVAS_MIN_WIDTH } from "./constants";
-import type { TextboxConfig } from "@/types";
+import type { TextboxConfig, WithId } from "@/types";
+import { nanoid } from "nanoid";
 
 export async function loadImage(url: string) {
   const image = await FabricImage.fromURL(url);
@@ -28,26 +29,17 @@ export async function loadBackgroundImage(url: string, canvas: FabricCanvas) {
   canvas.renderAll();
 }
 
-function createTextbox(
+export function createTextbox(
   canvas: FabricCanvas,
-  { content, x = 0, y = 0, allCaps, ...rest }: TextboxConfig,
+  {
+    content,
+    x = 0.5,
+    y = 0.5,
+    allCaps,
+    ...rest
+  }: Omit<TextboxConfig, "id"> & { id?: string },
 ) {
-  return new FabricTextbox(allCaps ? content.toUpperCase() : content, {
-    originX: "center",
-    originY: "center",
-    left: x * canvas.width,
-    top: y * canvas.height,
-    ...rest,
-  });
-}
-
-export function loadTextboxes(canvas: FabricCanvas, texts: TextboxConfig[]) {
-  if (texts.length === 0) return;
-
-  const { x: cx, y: cy } = canvas.getCenterPoint();
   const defaultTextConfig: Partial<TextboxConfig> = {
-    x: cx,
-    y: cy,
     fontSize: 60,
     allCaps: true,
     fill: "white",
@@ -57,18 +49,32 @@ export function loadTextboxes(canvas: FabricCanvas, texts: TextboxConfig[]) {
     strokeWidth: 1,
     charSpacing: -50,
     textAlign: "center",
+    originX: "center",
+    originY: "center",
+    left: x * canvas.width,
+    top: y * canvas.height,
     shadow: new Shadow({
       color: "black",
       blur: 4,
       offsetX: 2,
       offsetY: 2,
     }),
+    id: nanoid(),
   };
-  canvas.add(
-    ...texts.map((config) =>
-      createTextbox(canvas, { ...defaultTextConfig, ...config }),
-    ),
-  );
+  return new FabricTextbox(allCaps ? content.toUpperCase() : content, {
+    ...defaultTextConfig,
+    ...rest,
+  });
+}
 
+export function loadTextboxes(canvas: FabricCanvas, texts: FabricTextbox[]) {
+  if (texts.length === 0) return [];
+
+  canvas.add(...texts);
   canvas.renderAll();
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function hasId<T>(obj: any): obj is WithId<T> {
+  return "id" in obj;
 }
