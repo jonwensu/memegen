@@ -130,6 +130,10 @@ export function useMemeCanvas() {
     bootstrap();
   }, [bootstrap]);
 
+  const reset = () => {
+    bootstrap();
+  };
+
   const addText = makeFabricHandler(
     (canvas: FabricCanvas, text: string, isActiveObject = true) => {
       const textbox = createTextbox(canvas, { content: text });
@@ -166,5 +170,6 @@ export function useMemeCanvas() {
     updateTextbox,
     download,
     copy,
+    reset,
   };
 }

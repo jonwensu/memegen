@@ -66,6 +66,7 @@ const Home = () => {
     updateTextbox,
     download,
     copy,
+    reset,
   } = useMemeCanvas();
 
   const handleCopyCanvas = async () => {
@@ -132,24 +133,27 @@ const Home = () => {
                 </Button>
               )}
             </div>
-
-            <div className="mb-5 mt-10 flex justify-between">
-              <div className="flex items-center divide-x divide-blue-400">
-                <Button
-                  onClick={download}
-                  className="rounded-none rounded-l-md bg-blue-500 text-white hover:bg-blue-400 active:bg-blue-600"
-                >
-                  Generate
-                </Button>
-                <Button
-                  onClick={handleCopyCanvas}
-                  className="rounded-none rounded-r-md bg-blue-500 text-white hover:bg-blue-400 active:bg-blue-600"
-                >
-                  <Copy />
+            {memeTemplate && (
+              <div className="mb-5 mt-10 flex justify-between">
+                <div className="flex items-center divide-x divide-blue-400">
+                  <Button
+                    onClick={download}
+                    className="rounded-none rounded-l-md bg-blue-500 text-white hover:bg-blue-400 active:bg-blue-600"
+                  >
+                    Generate
+                  </Button>
+                  <Button
+                    onClick={handleCopyCanvas}
+                    className="rounded-none rounded-r-md bg-blue-500 text-white hover:bg-blue-400 active:bg-blue-600"
+                  >
+                    <Copy />
+                  </Button>
+                </div>
+                <Button onClick={reset} variant="outline">
+                  Reset
                 </Button>
               </div>
-              <Button variant="outline">Reset</Button>
-            </div>
+            )}
           </div>
         </CardContent>
       </Card>
