@@ -5,7 +5,7 @@ import type { TextboxConfig, WithId } from "@/types";
 import { nanoid } from "nanoid";
 
 export async function loadImage(url: string) {
-  const image = await FabricImage.fromURL(url);
+  const image = await FabricImage.fromURL(url, { crossOrigin: "anonymous" });
 
   // Calculate scaling
   const scaleX = CANVAS_MIN_WIDTH / image.width;
@@ -77,4 +77,79 @@ export function loadTextboxes(canvas: FabricCanvas, texts: FabricTextbox[]) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function hasId<T>(obj: any): obj is WithId<T> {
   return "id" in obj;
+}
+
+export function downloadCanvas(canvas: FabricCanvas) {
+  const dataURL = canvas.toDataURL({
+    format: "png",
+    quality: 1,
+    multiplier: 2,
+  });
+  const link = document.createElement("a");
+  link.download = "meme.png";
+  link.href = dataURL;
+  link.click();
+  document.body.removeChild(link);
+}
+
+async function requestClipboardPermission() {
+  const permissionStatus = await navigator.permissions.query({
+    name: "clipboard-write" as PermissionName,
+  });
+
+  switch (permissionStatus.state) {
+    case "granted":
+      return true;
+    case "prompt":
+      // Trigger the permission prompt
+      try {
+        await navigator.clipboard.writeText("");
+        return true;
+      } catch (error) {
+        return false;
+      }
+    case "denied":
+      alert("Clipboard permission was denied...");
+      return false;
+  }
+}
+
+async function checkClipboardPermissions() {
+  try {
+    // Check if clipboard-write permission is available
+    const result = await navigator.permissions.query({
+      name: "clipboard-write" as PermissionName,
+    });
+    return result.state === "granted" || result.state === "prompt";
+  } catch (error) {
+    console.warn("Clipboard permissions API not available");
+    return false;
+  }
+}
+
+export async function copyCanvasToClipboard(canvas: FabricCanvas) {
+  try {
+    const hasPermission = await checkClipboardPermissions();
+    if (!hasPermission) {
+      console.warn("Clipboard write permission not granted");
+      if (!(await requestClipboardPermission())) {
+        return false;
+      }
+    }
+
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.lowerCanvasEl.toBlob((b) => {
+        if (!b) return reject(new Error("Failed to convert canvas to blob"));
+        resolve(b);
+      }, "image/png");
+    });
+
+    const data = new ClipboardItem({ "image/png": blob });
+
+    await navigator.clipboard.write([data]);
+    return true;
+  } catch (error) {
+    console.error("Failed to copy canvas to clipboard", error);
+    return false;
+  }
 }

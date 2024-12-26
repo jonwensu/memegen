@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import type { MemeTemplate } from "@/types";
-import { Copy } from "lucide-react";
+import { Copy, Trash } from "lucide-react";
+import { toast } from "sonner";
 
 const MEME_URL = "https://i.imgur.com/tDspe1M.jpeg";
 const OLD_MAN = "https://i.imgur.com/UukQHgi.jpeg";
@@ -63,7 +64,20 @@ const Home = () => {
     removeObject,
     addText,
     updateTextbox,
+    download,
+    copy,
   } = useMemeCanvas();
+
+  const handleCopyCanvas = async () => {
+    const isSuccess = await copy();
+    if (isSuccess) {
+      toast.success("Copied to clipboard", {
+        richColors: true,
+        duration: 1000,
+      });
+    }
+  };
+
   return (
     <main className="container mx-auto min-h-screen max-w-screen-lg space-y-4 bg-gray-900 py-8 text-gray-100">
       <h1 className="py-2 text-center text-4xl">Meme Generator</h1>
@@ -99,8 +113,9 @@ const Home = () => {
                       <Button
                         variant="destructive"
                         onClick={() => removeObject(textbox)}
+                        size="icon"
                       >
-                        X
+                        <Trash />
                       </Button>
                     </div>
                   </div>
@@ -119,11 +134,17 @@ const Home = () => {
             </div>
 
             <div className="mb-5 mt-10 flex justify-between">
-              <div className="flex items-center divide-x divide-green-400">
-                <Button className="rounded-none rounded-l-md bg-green-500 text-white hover:bg-green-700">
-                  Download
+              <div className="flex items-center divide-x divide-blue-400">
+                <Button
+                  onClick={download}
+                  className="rounded-none rounded-l-md bg-blue-500 text-white hover:bg-blue-400 active:bg-blue-600"
+                >
+                  Generate
                 </Button>
-                <Button className="rounded-none rounded-r-md bg-green-500 text-white hover:bg-green-700">
+                <Button
+                  onClick={handleCopyCanvas}
+                  className="rounded-none rounded-r-md bg-blue-500 text-white hover:bg-blue-400 active:bg-blue-600"
+                >
                   <Copy />
                 </Button>
               </div>

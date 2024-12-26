@@ -10,9 +10,10 @@ import {
   loadTextboxes,
   createTextbox,
   hasId,
+  downloadCanvas,
+  copyCanvasToClipboard,
 } from "../utils";
-import type { MemeTemplate, TextboxConfig } from "@/types";
-import { nanoid } from "nanoid";
+import type { MemeTemplate } from "@/types";
 
 type FabricConfig = {
   onSelect?: (object: FabricObject | null) => void;
@@ -145,6 +146,14 @@ export function useMemeCanvas() {
     },
   );
 
+  const download = makeFabricHandler((canvas: FabricCanvas) => {
+    downloadCanvas(canvas);
+  });
+
+  const copy = makeFabricHandler(async (canvas: FabricCanvas) => {
+    return await copyCanvasToClipboard(canvas);
+  });
+
   return {
     canvasRef,
     addText,
@@ -155,5 +164,7 @@ export function useMemeCanvas() {
     textboxes,
     removeObject,
     updateTextbox,
+    download,
+    copy,
   };
 }
