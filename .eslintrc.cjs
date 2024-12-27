@@ -4,6 +4,7 @@ module.exports = {
     "next/typescript",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/typescript",
+    "plugin:@tanstack/query/recommended",
     "next/core-web-vitals",
     "prettier",
   ],
@@ -84,6 +85,11 @@ module.exports = {
     ],
     "@typescript-eslint/consistent-type-imports": "error",
     "prefer-destructuring": ["error", { object: true, array: false }],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
+    ],
   },
   overrides: [
     {

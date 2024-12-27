@@ -105,7 +105,7 @@ async function requestClipboardPermission() {
       try {
         await navigator.clipboard.writeText("");
         return true;
-      } catch (error) {
+      } catch (_error) {
         return false;
       }
     case "denied":
@@ -121,7 +121,7 @@ async function checkClipboardPermissions() {
       name: "clipboard-write" as PermissionName,
     });
     return result.state === "granted" || result.state === "prompt";
-  } catch (error) {
+  } catch (_error) {
     console.warn("Clipboard permissions API not available");
     return false;
   }
