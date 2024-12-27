@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import type { MemeTemplate } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 import { Copy, Trash } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,7 +21,7 @@ const templates: MemeTemplate[] = [
     id: "1",
     url: MEME_URL,
 
-    description: "Drake Hotline Bling",
+    description: "Drake hotline Bling",
     texts: [
       { content: "Hello World", x: 0.75, y: 0.25 },
       { content: "Wazzup World", x: 0.75, y: 0.75 },
@@ -56,6 +57,16 @@ const templates: MemeTemplate[] = [
 ];
 
 const Home = () => {
+  const { data } = useQuery({
+    queryKey: ["memeTemplates"],
+    queryFn: async () => {
+      const response = await fetch(
+        "https://memegen-be.fly.dev/api/collections/meme_template/records",
+      );
+      const json = await response.json();
+      return json.items as MemeTemplate[];
+    },
+  });
   const {
     canvasRef,
     memeTemplate,
@@ -96,7 +107,7 @@ const Home = () => {
             <div className="my-5 flex flex-col gap-3">
               <MemeTemplatePicker
                 activeTemplate={memeTemplate}
-                templates={templates}
+                templates={data ?? []}
                 onSelect={setMemeTemplate}
               />
               <div className="flex max-h-80 flex-col gap-2 overflow-y-auto py-2">
