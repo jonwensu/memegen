@@ -35,13 +35,12 @@ export function createTextbox(
     content,
     x = 0.5,
     y = 0.5,
-    allCaps,
+    allCaps = true,
     ...rest
   }: Omit<TextboxConfig, "id"> & { id?: string },
 ) {
   const defaultTextConfig: Partial<TextboxConfig> = {
     fontSize: 60,
-    allCaps: true,
     fill: "white",
     fontFamily: "impact",
     fontWeight: "bold",
