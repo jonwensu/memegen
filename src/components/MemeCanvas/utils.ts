@@ -40,10 +40,9 @@ export function createTextbox(
   }: Omit<TextboxConfig, "id"> & { id?: string },
 ) {
   const defaultTextConfig: Partial<TextboxConfig> = {
-    fontSize: 60,
+    fontSize: 50,
     fill: "white",
     fontFamily: "impact",
-    fontWeight: "bold",
     stroke: "black",
     strokeWidth: 1,
     textAlign: "center",
@@ -53,9 +52,9 @@ export function createTextbox(
     top: y * canvas.height,
     shadow: new Shadow({
       color: "black",
-      blur: 4,
-      offsetX: 3,
-      offsetY: 3,
+      blur: 2,
+      offsetX: 2,
+      offsetY: 2,
     }),
     id: nanoid(),
   };
