@@ -46,7 +46,7 @@ export function createTextbox(
     fontFamily: "impact",
     fontWeight: "bold",
     stroke: "black",
-    strokeWidth: 0.5,
+    strokeWidth: 1,
     textAlign: "center",
     originX: "center",
     originY: "center",
@@ -63,6 +63,7 @@ export function createTextbox(
   return new FabricTextbox(allCaps ? content.toUpperCase() : content, {
     ...defaultTextConfig,
     ...rest,
+    strokeLineJoin: "bevel",
   });
 }
 
