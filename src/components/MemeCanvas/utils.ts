@@ -46,7 +46,7 @@ export function createTextbox(
     fontFamily: "impact",
     fontWeight: "bold",
     stroke: "black",
-    strokeWidth: 1,
+    strokeWidth: 0.5,
     textAlign: "center",
     originX: "center",
     originY: "center",
@@ -55,8 +55,8 @@ export function createTextbox(
     shadow: new Shadow({
       color: "black",
       blur: 4,
-      offsetX: 2,
-      offsetY: 2,
+      offsetX: 3,
+      offsetY: 3,
     }),
     id: nanoid(),
   };
