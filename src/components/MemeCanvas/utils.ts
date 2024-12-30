@@ -47,7 +47,7 @@ export function createTextbox(
     fontWeight: "bold",
     stroke: "black",
     strokeWidth: 1,
-    charSpacing: -50,
+    charSpacing: -20,
     textAlign: "center",
     originX: "center",
     originY: "center",
