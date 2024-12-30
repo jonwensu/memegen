@@ -63,7 +63,6 @@ export function createTextbox(
   return new FabricTextbox(allCaps ? content.toUpperCase() : content, {
     ...defaultTextConfig,
     ...rest,
-    strokeLineJoin: "bevel",
   });
 }
 
